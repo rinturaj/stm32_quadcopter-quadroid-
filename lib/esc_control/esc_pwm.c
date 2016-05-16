@@ -187,7 +187,7 @@ float change_range(float oldvalue,int select)
 //
 //return((((oldvalue - 0) * (99- 49)) / (100 - 0)) + 49);
 }
-
+// this fun:   to set pid offset gain
 float pid_range_change(float p,int percentage)
    {
      float a;
