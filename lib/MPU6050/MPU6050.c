@@ -1,32 +1,4 @@
-//MPU6050 I2C library for ARM STM32F103xx Microcontrollers - Main source file
-//Has bit, byte and buffer I2C R/W functions
-// 23/05/2012 by Harinadha Reddy Chintalapalli <harinath.ec@gmail.com>
-// Changelog:
-//     2012-05-23 - initial release. Thanks to Jeff Rowberg <jeff@rowberg.net> for his AVR/Arduino
-//                  based MPU6050 development which inspired me & taken as reference to develop this.
-/* ============================================================================================
- MPU6050 device I2C library code for ARM STM32F103xx is placed under the MIT license
- Copyright (c) 2012 Harinadha Reddy Chintalapalli
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ================================================================================================
- */
 
 /* Includes */
 #include "stm32f10x_rcc.h"              // Keil::Device:StdPeriph Drivers:RCC
@@ -57,10 +29,10 @@
  
  /* Set_Gyr_Scale
 *  Set scale of gyro data,
-*  Options: HIGH - ± 2000 °/s        16.4
-*           MEDIUM2 - ± 1000 °/s    32.8
-*           MEDIUM1 - ± 500 °/s    65.5
-*           LOW - ± 250 °/s      131
+*  Options: HIGH - Â± 2000 Â°/s        16.4
+*           MEDIUM2 - Â± 1000 Â°/s    32.8
+*           MEDIUM1 - Â± 500 Â°/s    65.5
+*           LOW - Â± 250 Â°/s      131
 */
 
 #define gyro_xsensitivity 131 //66.5 Dead on at last check
@@ -501,6 +473,9 @@ MPU_angle angle;
 on_kalman x_kfilter;
 on_kalman y_kfilter;
 on_kalman z_kfilter;
+
+
+
 void mpu6050_setup()
 {
 int mpu6050_ok,i;char a;
@@ -531,6 +506,7 @@ int mpu6050_ok,i;char a;
     }
    
 }
+// fun: to calculate angle from MPU data
 
 MPU_angle comfilter()
 {
@@ -544,17 +520,7 @@ MPU_angle comfilter()
 	angle.gyro_zRate=a[5]/gyro_zsensitivity;
 	
 	
-	//yaw=atan2(a[0],a[2])*57.295;
-//roll=atan2(accy,sqrt(accx^2+accz^2))
-	
-//	alpha=(tau)/(tau+dt) where tau is the desired time constant (how fast you want the readings to respond) and dt = 1/fs where fs is your sampling frequency. This equation is derived from filter/control theory will put a link to this as soon as I get it.
 
-//A quick and dirty way of implementing a complementary filter:
-//angle = (1-alpha)*(angle + gyro * dt) + (alpha)*(acc)
-	
-//yaw = 180 * atan (accelerationZ/sqrt(accelerationX*accelerationX + accelerationZ*accelerationZ))/M_PI;
-//	ACCEL_XANGLE = 57.295*atan((float)ACCEL_YOUT/ sqrt(pow((float)ACCEL_ZOUT,2)+pow((float)ACCEL_XOUT,2)));
-	
    angle.acc_xangle = 57.295*atan((float)a[1]/sqrt(pow((float)a[2],2)+pow((float)a[0],2)));
 	 angle.acc_yangle = 57.295*atan((float)a[0]/sqrt(pow((float)a[2],2)+pow((float)a[1],2)));
 //acc_zangle = 57.295*atan((float)a[2]/sqrt(pow((float)a[2],2)+pow((float)a[2],2)));
